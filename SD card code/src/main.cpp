@@ -3,10 +3,20 @@
 #include "SDBlockDevice.h"
 #include <stdio.h>
 #include <errno.h>
+#include <Adafruit_SSD1306.h>
 /* mbed_retarget.h is included after errno.h so symbols are mapped to
  * consistent values for all toolchains */
 #include "platform/mbed_retarget.h"
 
+class I2CPreInit : public I2C {
+ public:
+    I2CPreInit(PinName sda, PinName scl) : I2C(sda, scl) {
+        frequency(400000);
+        start();
+    }
+};
+I2CPreInit i2c(PB_7, PB_6);
+Adafruit_SSD1306_I2c mylcd(i2c, NC);
 
 SDBlockDevice sd(PA_7, PA_6, PA_5, PA_4);
 FATFileSystem fs("sd", &sd);
@@ -27,6 +37,7 @@ void errno_error(void* ret_val){
 
 int main()
 {
+	mylcd.clearDisplay();
 	int error = 0;
 	printf("Welcome to the filesystem example.\n");
 
@@ -74,6 +85,7 @@ int main()
 	error = closedir(dir);
 	return_error(error);
 	printf("Filesystem Demo complete.\n");
-
+	mylcd.printf("hello");
+	mylcd.display();
 	while (true) {}
 }
