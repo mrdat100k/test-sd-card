@@ -1,9 +1,10 @@
 #include "mbed.h"
+#include "rtos.h"
 #include "FATFileSystem.h"
 #include "SDBlockDevice.h"
 #include <stdio.h>
 #include <errno.h>
-#include <Adafruit_SSD1306.h>
+#include "Adafruit_SSD1306.h"
 /* mbed_retarget.h is included after errno.h so symbols are mapped to
  * consistent values for all toolchains */
 #include "platform/mbed_retarget.h"
